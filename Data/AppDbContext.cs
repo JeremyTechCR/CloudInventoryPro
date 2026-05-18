@@ -1,0 +1,19 @@
+﻿using CloudInventoryPro.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace CloudInventoryPro.Data
+{
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+
+        }
+
+        // TABLAS
+        public DbSet<Categoria> Categorias { get; set; }
+
+        public DbSet<Producto> Productos { get; set; }
+    }
+}

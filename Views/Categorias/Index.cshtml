@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CloudInventoryPro.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Categorias";
+}
+
+<h1 class="mb-4">Lista de Categorías</h1>
+
+<a asp-action="Create" class="btn btn-primary mb-3">
+    Nueva Categoría
+</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdCategoria</td>
+                <td>@item.Nombre</td>
+                <td>
+                    @(item.Estado ? "Activo" : "Inactivo")
+
+                    <td>
+                        <a asp-action="Edit"
+                               asp-route-id="@item.IdCategoria"
+                               class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+
+                        <a asp-action="Delete"
+                               asp-route-id="@item.IdCategoria"
+                               class="btn btn-danger btn-sm">
+                            Eliminar
+                        </a>
+                    </td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
