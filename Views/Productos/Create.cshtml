@@ -1,0 +1,84 @@
+﻿@model CloudInventoryPro.Models.Producto
+
+@{
+    ViewData["Title"] = "Crear Producto";
+}
+
+<h1 class="mb-4">Crear Producto</h1>
+
+<form asp-action="Create"
+      method="post"
+      enctype="multipart/form-data">
+
+    <div class="mb-3">
+
+        <label>Nombre</label>
+
+        <input asp-for="Nombre"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Descripción</label>
+
+        <textarea asp-for="Descripcion"
+                  class="form-control"></textarea>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Precio</label>
+
+        <input asp-for="Precio"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Stock</label>
+
+        <input asp-for="Stock"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Categoría</label>
+
+        <select asp-for="IdCategoria"
+                asp-items="ViewBag.Categorias"
+                class="form-select">
+
+            <option value="">
+                Seleccione una categoría
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Imagen</label>
+
+        <input type="file"
+               name="archivoImagen"
+               class="form-control" />
+
+    </div>
+
+
+    <button type="submit"
+            class="btn btn-success">
+        Guardar
+    </button>
+
+</form>
+
+
+<div asp-validation-summary="All" class="text-danger"></div>

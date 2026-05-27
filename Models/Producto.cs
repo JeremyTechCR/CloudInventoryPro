@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudInventoryPro.Models
@@ -22,8 +23,11 @@ namespace CloudInventoryPro.Models
         public int IdCategoria { get; set; }
 
         [ForeignKey("IdCategoria")]
-        public Categoria Categoria { get; set; }
+        [ValidateNever]
+        public Categoria? Categoria { get; set; }
 
         public DateTime FechaRegistro { get; set; }
+
+        public string? Imagen { get; set; }
     }
 }
