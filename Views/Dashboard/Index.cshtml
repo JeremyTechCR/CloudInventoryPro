@@ -1,0 +1,179 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1 class="mb-4">
+    Dashboard Administrativo
+</h1>
+
+<div class="row">
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card bg-primary text-white shadow">
+
+            <div class="card-body">
+
+                <h5>Total Productos</h5>
+
+                <h2>
+                    @ViewBag.TotalProductos
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card bg-success text-white shadow">
+
+            <div class="card-body">
+
+                <h5>Total Categorías</h5>
+
+                <h2>
+                    @ViewBag.TotalCategorias
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card bg-warning text-dark shadow">
+
+            <div class="card-body">
+
+                <h5>Stock Total</h5>
+
+                <h2>
+                    @ViewBag.StockTotal
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card bg-danger text-white shadow">
+
+            <div class="card-body">
+
+                <h5>Bajo Stock</h5>
+
+                <h2>
+                    @ViewBag.ProductosBajoStock
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row mt-5">
+
+    <div class="col-md-8">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-dark text-white">
+
+                Productos por Categoría
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="graficoCategorias"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-danger text-white">
+
+                Productos Bajo Stock
+
+            </div>
+
+            <div class="card-body">
+
+                <h1 class="display-3 tem oxt-center text-danger">
+
+                    @ViewBag.ProductosBajoStock
+
+                </h1>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        const ctx =
+        document.getElementById('graficoCategorias');
+
+        new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+
+        labels: @Html.Raw(ViewBag.CategoriasGrafico),
+
+        datasets: [{
+
+        label: 'Productos',
+
+        data: @Html.Raw(ViewBag.CantidadProductos),
+
+        borderWidth: 1
+
+        }]
+        },
+
+        options: {
+
+        responsive: true,
+
+        scales: {
+
+        y: {
+
+        beginAtZero: true
+
+        }
+        }
+        }
+        });
+
+    </script>
+
+}

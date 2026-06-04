@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace CloudInventoryPro.Models
 {
@@ -11,5 +12,8 @@ namespace CloudInventoryPro.Models
         public string Nombre { get; set; }
 
         public bool Estado { get; set; }
+
+        [ValidateNever]
+        public ICollection<Producto> Productos { get; set; } = new List<Producto>();
     }
 }
