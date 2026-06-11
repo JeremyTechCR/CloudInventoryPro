@@ -8,120 +8,129 @@
 
 <div class="row">
 
-    <div class="col-md-3 mb-4">
-
+    <div class="col-md-2 mb-4">
         <div class="card bg-primary text-white shadow">
-
             <div class="card-body">
-
                 <h5>Total Productos</h5>
-
-                <h2>
-                    @ViewBag.TotalProductos
-                </h2>
-
+                <h2>@ViewBag.TotalProductos</h2>
             </div>
-
         </div>
-
     </div>
 
-    <div class="col-md-3 mb-4">
-
+    <div class="col-md-2 mb-4">
         <div class="card bg-success text-white shadow">
-
             <div class="card-body">
-
                 <h5>Total Categorías</h5>
-
-                <h2>
-                    @ViewBag.TotalCategorias
-                </h2>
-
+                <h2>@ViewBag.TotalCategorias</h2>
             </div>
-
         </div>
-
     </div>
 
-    <div class="col-md-3 mb-4">
-
+    <div class="col-md-2 mb-4">
         <div class="card bg-warning text-dark shadow">
-
             <div class="card-body">
-
                 <h5>Stock Total</h5>
-
-                <h2>
-                    @ViewBag.StockTotal
-                </h2>
-
+                <h2>@ViewBag.StockTotal</h2>
             </div>
-
         </div>
-
     </div>
 
-    <div class="col-md-3 mb-4">
-
+    <div class="col-md-2 mb-4">
         <div class="card bg-danger text-white shadow">
-
             <div class="card-body">
-
                 <h5>Bajo Stock</h5>
+                <h2>@ViewBag.ProductosBajoStock</h2>
+            </div>
+        </div>
+    </div>
 
-                <h2>
-                    @ViewBag.ProductosBajoStock
-                </h2>
+    <div class="col-md-2 mb-4">
+        <div class="card bg-info text-white shadow">
+            <div class="card-body">
+                <h5>Valor Inventario</h5>
+                <h2>₡ @String.Format("{0:N2}", ViewBag.ValorInventario)</h2>
+            </div>
+        </div>
+    </div>
 
+    @{
+        string colorSalud = "bg-danger text-white";
+
+        if (ViewBag.SaludInventario >= 80)
+        {
+            colorSalud = "bg-success text-white";
+        }
+        else if (ViewBag.SaludInventario >= 50)
+        {
+            colorSalud = "bg-warning text-dark";
+        }
+    }
+
+    <div class="card @colorSalud shadow">
+        <div class="card-body">
+            <h5>Salud Inventario</h5>
+            <h2>@String.Format("{0:N0}", ViewBag.SaludInventario)%</h2>
+        </div>
+    </div>
+
+<div class="row mt-5">
+
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                Valor del Inventario por Categoría
             </div>
 
+            <div class="card-body">
+                <canvas id="graficoPieCategorias"></canvas>
+            </div>
         </div>
+    </div>
 
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                Productos Bajo Stock
+            </div>
+
+            <div class="card-body">
+                <h1 class="display-3 text-center text-danger">
+                    @ViewBag.ProductosBajoStock
+                </h1>
+            </div>
+        </div>
     </div>
 
 </div>
 
 <div class="row mt-5">
 
-    <div class="col-md-8">
-
+    <div class="col-md-12">
         <div class="card shadow">
-
-            <div class="card-header bg-dark text-white">
-
-                Productos por Categoría
-
+            <div class="card-header bg-primary text-white">
+                Cantidad de Productos por Categoría
             </div>
 
             <div class="card-body">
-
-                <canvas id="graficoCategorias"></canvas>
-
+                <canvas id="graficoBarrasCategorias"></canvas>
             </div>
-
         </div>
-
     </div>
 
-    <div class="col-md-4">
+</div>
+
+<div class="row mt-5">
+
+    <div class="col-md-12">
 
         <div class="card shadow">
 
-            <div class="card-header bg-danger text-white">
-
-                Productos Bajo Stock
-
+            <div class="card-header bg-success text-white">
+                Productos Agregados por Fecha
             </div>
 
             <div class="card-body">
-
-                <h1 class="display-3 tem oxt-center text-danger">
-
-                    @ViewBag.ProductosBajoStock
-
-                </h1>
-
+                <canvas id="graficoProductosFecha"></canvas>
             </div>
 
         </div>
@@ -131,49 +140,273 @@
 </div>
 
 
+<div class="row mt-5">
+
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                Top 5 Productos Más Caros
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var producto in ViewBag.TopProductosCaros)
+                        {
+                            <tr>
+                                <td>@producto.Nombre</td>
+                                <td>₡ @String.Format("{0:N2}", producto.Precio)</td>
+                                <td>@producto.Stock</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+    <div class="row mt-5">
+
+        <div class="col-md-12">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-warning text-dark">
+                    Top Categorías por Valor
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-bordered table-striped">
+
+                        <thead class="table-dark">
+
+                            <tr>
+                                <th>Ranking</th>
+                                <th>Categoría</th>
+                                <th>Valor Total</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @{
+                                int ranking = 1;
+                            }
+
+                            @foreach (var categoria in ViewBag.TopCategoriasValor)
+                            {
+                                <tr>
+                                    <td>#@ranking</td>
+                                    <td>@categoria.Nombre</td>
+                                    <td>
+                                        ₡ @String.Format("{0:N2}", categoria.ValorTotal)
+                                    </td>
+                                </tr>
+
+                                ranking++;
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<div class="row mt-5">
+
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                Últimos Productos Agregados
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Fecha Registro</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var producto in ViewBag.UltimosProductos)
+                        {
+                            <tr>
+                                <td>@producto.Nombre</td>
+                                <td>₡ @String.Format("{0:N2}", producto.Precio)</td>
+                                <td>@producto.Stock</td>
+                                <td>@producto.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row mt-5">
+
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                Productos con Bajo Stock
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Stock</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var producto in ViewBag.ListaBajoStock)
+                        {
+                            <tr>
+                                <td>@producto.Nombre</td>
+                                <td>@producto.Stock</td>
+                                <td>₡ @String.Format("{0:N2}", producto.Precio)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 @section Scripts {
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-
         const ctx =
-        document.getElementById('graficoCategorias');
+        document.getElementById('graficoPieCategorias');
 
         new Chart(ctx, {
-
-        type: 'bar',
+        type: 'pie',
 
         data: {
-
         labels: @Html.Raw(ViewBag.CategoriasGrafico),
 
         datasets: [{
+        label: 'Valor inventario',
 
-        label: 'Productos',
+        data: @Html.Raw(ViewBag.ValorPorCategoria),
 
-        data: @Html.Raw(ViewBag.CantidadProductos),
+        backgroundColor: [
+        '#0d6efd',
+        '#198754',
+        '#ffc107',
+        '#dc3545',
+        '#0dcaf0',
+        '#6f42c1',
+        '#fd7e14'
+        ],
 
-        borderWidth: 1
-
+        borderWidth: 2
         }]
         },
 
         options: {
-
         responsive: true,
 
-        scales: {
-
-        y: {
-
-        beginAtZero: true
-
+        plugins: {
+        legend: {
+        position: 'bottom'
         }
         }
         }
         });
 
-    </script>
+        const ctxBar =
+        document.getElementById('graficoBarrasCategorias');
 
+        new Chart(ctxBar, {
+        type: 'bar',
+
+        data: {
+        labels: @Html.Raw(ViewBag.CategoriasGrafico),
+
+        datasets: [{
+        label: 'Cantidad de productos',
+
+        data: @Html.Raw(ViewBag.CantidadProductos),
+
+        backgroundColor: '#0d6efd',
+
+        borderWidth: 1
+        }]
+        },
+
+        options: {
+        responsive: true,
+
+        scales: {
+        y: {
+        beginAtZero: true
+        }
+        }
+        }
+        });
+
+        const ctxFecha =
+        document.getElementById('graficoProductosFecha');
+
+        new Chart(ctxFecha, {
+        type: 'line',
+
+        data: {
+        labels: @Html.Raw(ViewBag.FechasProductos),
+
+        datasets: [{
+        label: 'Productos agregados',
+
+        data: @Html.Raw(ViewBag.CantidadProductosPorFecha),
+
+        borderWidth: 2,
+
+        tension: 0.3
+        }]
+        },
+
+        options: {
+        responsive: true,
+
+        scales: {
+        y: {
+        beginAtZero: true
+        }
+        }
+        }
+        });
+    </script>
 }

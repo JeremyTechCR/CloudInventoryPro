@@ -25,6 +25,10 @@ namespace CloudInventoryPro.Controllers
             ViewBag.StockTotal =
                 _context.Productos.Sum(p => p.Stock);
 
+            ViewBag.ValorInventario =
+    _context.Productos
+        .Sum(p => p.Precio * p.Stock);
+
             ViewBag.ProductosBajoStock =
                 _context.Productos
                 .Count(p => p.Stock <= 5);
@@ -34,12 +38,79 @@ namespace CloudInventoryPro.Controllers
     .ToList();
 
             ViewBag.CategoriasGrafico =
+    JsonSerializer.Serialize(
+        categorias.Select(c => c.Nombre));
+
+            ViewBag.ValorPorCategoria =
                 JsonSerializer.Serialize(
-                    categorias.Select(c => c.Nombre));
+                    categorias.Select(c =>
+                        c.Productos.Sum(p =>
+                            p.Precio * p.Stock)));
 
             ViewBag.CantidadProductos =
+    JsonSerializer.Serialize(
+        categorias.Select(c =>
+            c.Productos.Count()));
+
+            ViewBag.ListaBajoStock = _context.Productos
+    .Where(p => p.Stock <= 5)
+    .OrderBy(p => p.Stock)
+    .ToList();
+
+            ViewBag.TopProductosCaros = _context.Productos
+    .OrderByDescending(p => p.Precio)
+    .Take(5)
+    .ToList();
+
+            ViewBag.UltimosProductos = _context.Productos
+    .OrderByDescending(p => p.FechaRegistro)
+    .Take(5)
+    .ToList();
+
+            int totalProductos =
+            _context.Productos.Count();
+
+            int productosSaludables =
+                _context.Productos.Count(p => p.Stock > 5);
+
+            double saludInventario = 0;
+
+            if (totalProductos > 0)
+            {
+                saludInventario =
+                    ((double)productosSaludables / totalProductos) * 100;
+            }
+
+            ViewBag.SaludInventario =
+                saludInventario;
+
+            var productosPorFecha = _context.Productos
+    .GroupBy(p => p.FechaRegistro.Date)
+    .Select(g => new
+    {
+        Fecha = g.Key.ToString("dd/MM/yyyy"),
+        Cantidad = g.Count()
+    })
+    .ToList();
+
+            ViewBag.FechasProductos =
                 JsonSerializer.Serialize(
-                    categorias.Select(c => c.Productos.Count));
+                    productosPorFecha.Select(p => p.Fecha));
+
+            ViewBag.CantidadProductosPorFecha =
+                JsonSerializer.Serialize(
+                    productosPorFecha.Select(p => p.Cantidad));
+
+            ViewBag.TopCategoriasValor = _context.Categorias
+    .Include(c => c.Productos)
+    .Select(c => new
+    {
+        Nombre = c.Nombre,
+        ValorTotal = c.Productos.Sum(p => p.Precio * p.Stock)
+    })
+    .OrderByDescending(c => c.ValorTotal)
+    .Take(5)
+    .ToList();
 
             return View();
 
