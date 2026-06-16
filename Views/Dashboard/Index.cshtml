@@ -66,12 +66,61 @@
         }
     }
 
-    <div class="card @colorSalud shadow">
-        <div class="card-body">
-            <h5>Salud Inventario</h5>
-            <h2>@String.Format("{0:N0}", ViewBag.SaludInventario)%</h2>
+    <div class="col-md-2 mb-4">
+        <div class="card @colorSalud shadow">
+            <div class="card-body">
+                <h5>Salud Inventario</h5>
+                <h2>@String.Format("{0:N0}", ViewBag.SaludInventario)%</h2>
+            </div>
         </div>
     </div>
+
+</div>
+
+
+<div class="col-md-3 mb-4">
+
+    <div class="card bg-dark text-white shadow">
+
+        <div class="card-body">
+
+            <h5>Producto Top</h5>
+
+            <p class="mb-1">
+                @ViewBag.ProductoTop
+            </p>
+
+            <h4>
+                ₡ @String.Format("{0:N2}", ViewBag.ProductoTopValor)
+            </h4>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="col-md-3 mb-4">
+
+    <div class="card bg-success text-white shadow">
+
+        <div class="card-body">
+
+            <h5>Categoría Top</h5>
+
+            <p class="mb-1">
+                @ViewBag.CategoriaTop
+            </p>
+
+            <h4>
+                ₡ @String.Format("{0:N2}", ViewBag.CategoriaTopValor)
+            </h4>
+
+        </div>
+
+    </div>
+
+</div>
 
 <div class="row mt-5">
 
@@ -122,9 +171,7 @@
 <div class="row mt-5">
 
     <div class="col-md-12">
-
         <div class="card shadow">
-
             <div class="card-header bg-success text-white">
                 Productos Agregados por Fecha
             </div>
@@ -132,13 +179,10 @@
             <div class="card-body">
                 <canvas id="graficoProductosFecha"></canvas>
             </div>
-
         </div>
-
     </div>
 
 </div>
-
 
 <div class="row mt-5">
 
@@ -175,61 +219,141 @@
 
 </div>
 
+<div class="row mt-5">
 
-    <div class="row mt-5">
+    <div class="col-md-12">
 
-        <div class="col-md-12">
+        <div class="card shadow">
 
-            <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                Ranking de Productos por Valor
+            </div>
 
-                <div class="card-header bg-warning text-dark">
-                    Top Categorías por Valor
-                </div>
+            <div class="card-body">
 
-                <div class="card-body">
+                <table class="table table-bordered table-striped">
 
-                    <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
 
-                        <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Valor Total</th>
+                        </tr>
 
+                    </thead>
+
+                    <tbody>
+
+                        @{
+                            int posicion = 1;
+                        }
+
+                        @foreach (var producto in ViewBag.RankingProductos)
+                        {
                             <tr>
-                                <th>Ranking</th>
-                                <th>Categoría</th>
-                                <th>Valor Total</th>
+
+                                <td>
+                                    @posicion
+                                </td>
+
+                                <td>
+                                    @producto.Nombre
+                                </td>
+
+                                <td>
+                                    ₡ @String.Format("{0:N2}", producto.Precio)
+                                </td>
+
+                                <td>
+                                    @producto.Stock
+                                </td>
+
+                                <td>
+                                    ₡ @String.Format("{0:N2}", producto.Precio * producto.Stock)
+                                </td>
+
                             </tr>
 
-                        </thead>
+                            posicion++;
+                        }
 
-                        <tbody>
+                    </tbody>
 
-                            @{
-                                int ranking = 1;
-                            }
-
-                            @foreach (var categoria in ViewBag.TopCategoriasValor)
-                            {
-                                <tr>
-                                    <td>#@ranking</td>
-                                    <td>@categoria.Nombre</td>
-                                    <td>
-                                        ₡ @String.Format("{0:N2}", categoria.ValorTotal)
-                                    </td>
-                                </tr>
-
-                                ranking++;
-                            }
-
-                        </tbody>
-
-                    </table>
-
-                </div>
+                </table>
 
             </div>
 
         </div>
 
     </div>
+
+</div>
+
+<div class="row mt-5">
+
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                Top Categorías por Valor
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Ranking</th>
+                            <th>Categoría</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int ranking = 1;
+                        }
+
+                        @foreach (var categoria in ViewBag.TopCategoriasValor)
+                        {
+                            <tr>
+                                <td>#@ranking</td>
+                                <td>@categoria.Nombre</td>
+                                <td>₡ @String.Format("{0:N2}", categoria.ValorTotal)</td>
+                            </tr>
+
+                            ranking++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-md-12">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-info text-white">
+                Top Categorías por Valor (Gráfico)
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="graficoTopCategorias"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 <div class="row mt-5">
 
@@ -283,16 +407,49 @@
                             <th>Producto</th>
                             <th>Stock</th>
                             <th>Precio</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach (var producto in ViewBag.ListaBajoStock)
                         {
-                            <tr>
+                            string claseFila = "";
+
+                            if (producto.Stock <= 1)
+                            {
+                                claseFila = "table-danger";
+                            }
+                            else if (producto.Stock <= 5)
+                            {
+                                claseFila = "table-warning";
+                            }
+
+                            <tr class="@claseFila">
                                 <td>@producto.Nombre</td>
                                 <td>@producto.Stock</td>
                                 <td>₡ @String.Format("{0:N2}", producto.Precio)</td>
+
+                                <td>
+                                    @if (producto.Stock <= 1)
+                                    {
+                                        <span class="badge bg-danger">
+                                            Crítico
+                                        </span>
+                                    }
+                                    else if (producto.Stock <= 5)
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            Bajo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">
+                                            Normal
+                                        </span>
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -407,6 +564,49 @@
         }
         }
         }
+        });
+
+        const ctxTopCategorias =
+        document.getElementById('graficoTopCategorias');
+
+        new Chart(ctxTopCategorias, {
+
+        type: 'bar',
+
+        data: {
+
+        labels:
+        @Html.Raw(ViewBag.NombresCategoriasTop),
+
+        datasets: [{
+
+        label: 'Valor Inventario',
+
+        data:
+        @Html.Raw(ViewBag.ValoresCategoriasTop),
+
+        backgroundColor: [
+
+        '#0d6efd',
+        '#198754',
+        '#ffc107',
+        '#dc3545',
+        '#0dcaf0'
+
+        ]
+
+        }]
+
+        },
+
+        options: {
+
+        indexAxis: 'y',
+
+        responsive: true
+
+        }
+
         });
     </script>
 }
