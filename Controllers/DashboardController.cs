@@ -143,6 +143,25 @@ namespace CloudInventoryPro.Controllers
                 JsonSerializer.Serialize(
                     topCategoriasValor.Select(c => c.ValorTotal));
 
+
+            // CLIENTES
+
+            var clientes = _context.Clientes.ToList();
+
+            ViewBag.TotalClientes =
+                clientes.Count();
+
+            ViewBag.ClientesActivos =
+                clientes.Count(c => c.Estado);
+
+            ViewBag.ClientesInactivos =
+                clientes.Count(c => !c.Estado);
+
+            ViewBag.ClientesNuevosMes =
+                clientes.Count(c =>
+                    c.FechaRegistro.Month == DateTime.Now.Month &&
+                    c.FechaRegistro.Year == DateTime.Now.Year);
+
             return View();
         }
     }
