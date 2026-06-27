@@ -1,0 +1,139 @@
+﻿@model CloudInventoryPro.ViewModels.VentaCompletaVM
+
+@{
+    ViewData["Title"] = "Nueva Venta Completa";
+}
+
+<h1 class="mb-4">Nueva Venta Completa</h1>
+
+<div class="card shadow">
+    <div class="card-header bg-success text-white">
+        Registrar venta con múltiples productos
+    </div>
+
+    <div class="card-body">
+
+        <form method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Cliente</label>
+                <select asp-for="IdCliente"
+                        asp-items="Model.Clientes"
+                        class="form-control">
+                    <option value="">Seleccione un cliente</option>
+                </select>
+            </div>
+
+            <hr />
+
+            <h5>Agregar Producto</h5>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label class="form-label">Producto</label>
+                    <select id="productoSelect"
+                            class="form-control"
+                            asp-items="Model.Productos">
+                        <option value="">Seleccione un producto</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number"
+                           id="cantidadInput"
+                           class="form-control"
+                           min="1"
+                           value="1" />
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="button"
+                            class="btn btn-primary w-100"
+                            onclick="agregarProducto()">
+                        Agregar
+                    </button>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <table class="table table-bordered table-striped mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaProductos">
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-success">
+                Guardar Venta
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Volver
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let index = 0;
+
+        function agregarProducto() {
+            const productoSelect = document.getElementById("productoSelect");
+            const cantidadInput = document.getElementById("cantidadInput");
+
+            const idProducto = productoSelect.value;
+            const nombreProducto = productoSelect.options[productoSelect.selectedIndex].text;
+            const cantidad = cantidadInput.value;
+
+            if (!idProducto || cantidad <= 0) {
+                alert("Seleccione un producto y una cantidad válida.");
+                return;
+            }
+
+            const tabla = document.getElementById("tablaProductos");
+
+            const fila = `
+                <tr>
+                    <td>
+                        ${nombreProducto}
+                        <input type="hidden" name="Detalles[${index}].IdProducto" value="${idProducto}" />
+                    </td>
+
+                    <td>
+                        ${cantidad}
+                        <input type="hidden" name="Detalles[${index}].Cantidad" value="${cantidad}" />
+                    </td>
+
+                    <td>
+                        <button type="button"
+                                class="btn btn-danger btn-sm"
+                                onclick="quitarProducto(this)">
+                            Quitar
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+            tabla.insertAdjacentHTML("beforeend", fila);
+
+            index++;
+        }
+
+                function quitarProducto(boton) {
+            boton.parentElement.parentElement.remove();
+        }
+    </script>
+}

@@ -19,5 +19,9 @@ namespace CloudInventoryPro.Data
         public DbSet<Usuario> Usuarios { get; set; }
 
         public DbSet<Cliente> Clientes { get; set; }
+
+        public DbSet<Venta> Ventas { get; set; }
+
+        public DbSet<DetalleVenta> DetalleVentas { get; set; }
     }
 }

@@ -1,0 +1,57 @@
+@model CloudInventoryPro.Models.Venta
+
+@{
+    ViewData["Title"] = "Nueva Venta";
+}
+
+<h1 class="mb-4">Nueva Venta</h1>
+
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        Registrar Venta
+    </div>
+
+    <div class="card-body">
+        <form asp-action="Create">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="FechaVenta" class="form-label">Fecha de Venta</label>
+                <input asp-for="FechaVenta" class="form-control" />
+                <span asp-validation-for="FechaVenta" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Total" class="form-label">Total</label>
+                <input asp-for="Total" class="form-control" />
+                <span asp-validation-for="Total" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="IdCliente" class="form-label">Cliente</label>
+                <select asp-for="IdCliente"
+                        class="form-control"
+                        asp-items="ViewBag.IdCliente">
+                    <option value="">Seleccione un cliente</option>
+                </select>
+                <span asp-validation-for="IdCliente" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Guardar Venta
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Volver
+            </a>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
